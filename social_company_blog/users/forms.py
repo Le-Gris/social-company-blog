@@ -8,7 +8,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from social_company_blog.models import User
 
-class Login(FlaskForm):
+class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Log In')
