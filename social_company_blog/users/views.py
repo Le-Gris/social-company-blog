@@ -33,7 +33,7 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filterby(email=form.email.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
 
         if user.check_password(form.password.data) and user is not None:
             login_user(user)
@@ -41,8 +41,8 @@ def login():
         
             next = request.args.get('next')
 
-            if next == None or next[0] =='/':
-                next = redirect(url_for('core.index'))
+            if next == None or not next[0] =='/':
+                next = url_for('core.index')
             
             return redirect(next)
 
@@ -55,16 +55,17 @@ def logout():
     return redirect(url_for('core.index'))
 
 # account (update)
-@users.route('/accout', methods=['GET', 'POST'])
+@users.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
 
     form = UpdateUserForm()
+
     if form.validate_on_submit():
 
         if form.picture.data:
             username = current_user.username
-            pic = add_profile_pic(username=username)
+            pic = add_profile_pic(form.picture.data, username)
             current_user.profile_image = pic
 
         current_user.username = form.username.data
@@ -75,10 +76,10 @@ def account():
         return redirect(url_for('users.account'))
 
     elif request.method == 'GET':
-        form.username = current_user.username
+        form.username.data = current_user.username
         form.email.data = current_user.email
 
-    profile_image = url_for('static', filename='profile+pics/'+current_user.profile_image)
+    profile_image = url_for('static', filename='profile+pics/' + current_user.profile_image)
     return render_template('account.html', profile_image=profile_image, form=form)
 
 #user's list of blogposts
