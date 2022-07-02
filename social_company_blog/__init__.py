@@ -28,8 +28,10 @@ login_manager.login_view = "users.login"
 
 from social_company_blog.core.views import core
 from social_company_blog.users.views import users
+from social_company_blog.blog_posts.views import blog_posts
 from social_company_blog.error_pages.handlers import error_pages
 
 app.register_blueprint(core)
 app.register_blueprint(users)
+app.register_blueprint(blog_posts)
 app.register_blueprint(error_pages)
